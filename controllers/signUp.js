@@ -27,6 +27,36 @@ router.post("/signup",async(req,res)=>{
 
     })
 
+router.post("/login",async(req,res)=>{
+    let emailid = req.body.emailId
+    let result = await userModel.findOne({"emailId":emailid})
+    if (!result) {
+        return res.json({
+            "status":"invalid emailid"
+        })
+    }
+    let dbPassword = result.password
+    let inputPassword = req.body.password
+    console.log(dbPassword)
+    console.log(inputPassword)
+
+    const match = await bcrypt.compare(inputPassword,dbPassword)
+    if(!match){
+        return res.json(
+            {
+                "status":"invalid password"
+            }
+        )
+    }
+
+    req.json(
+        {
+            "status":"invalid password"
+        }
+    )
+
+})
+
 })
 
 module.exports=router
