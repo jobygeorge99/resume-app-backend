@@ -10,4 +10,10 @@ router.post("/add",async(req,res)=>{
     res.json({status:"success"})
 })
 
+router.post("/viewresume",async(req,res)=>{
+    let data=req.body
+    let result = await resumeModel.find(data)
+    res.json(result)
+})
+
 module.exports=router
