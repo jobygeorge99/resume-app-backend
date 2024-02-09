@@ -1,7 +1,8 @@
 const express = require("express")
 const userModel = require("../models/userModel")
-const { hash } = require("bcryptjs")
+const bcrypt = require("bcryptjs")
 const router = express.Router()
+
 
 hashPasswordGenerator = async(pass)=>{
     const salt = await bcrypt.genSalt(10)
