@@ -1,7 +1,8 @@
 const express = require("express")
 const userModel = require("../models/userModel")
-const { hash } = require("bcryptjs")
+const bcrypt = require("bcryptjs")
 const router = express.Router()
+
 
 hashPasswordGenerator = async(pass)=>{
     const salt = await bcrypt.genSalt(10)
@@ -25,7 +26,40 @@ router.post("/signup",async(req,res)=>{
         })
 
     })
+})
+router.post("/login",async(req,res)=>{
+    let emailid = req.body.emailId
+    let result = await userModel.findOne({"emailId":emailid})
+    if (!result) {
+        return res.json({
+            status:"invalid emailid"
+        })
+    }
+    else{
+        let dbPassword = result.password
+    let inputPassword = req.body.password
+    console.log(dbPassword)
+    console.log(inputPassword)
+
+    const match = await bcrypt.compare(inputPassword,dbPassword)
+    if(!match){
+        return res.json(
+            {
+                status:"invalid password"
+            }
+        )
+    }
+    else{
+    res.json(
+        {
+            status:"success"
+        }
+    )
+    }
+    }
 
 })
+
+
 
 module.exports=router
